@@ -65,4 +65,8 @@ class Films
     sql = "SELECT * FROM tickets WHERE film_id = #{@id}"
     return Tickets.get_objects(sql).count
   end
+  
+  def get_price()
+    return @price
+  end 
 end

@@ -8,6 +8,7 @@ class Customers
     @id = options['id'].to_i
     @name = options['name']
     @funds = options['funds'].to_i
+    
   end
 
   def save()
@@ -50,7 +51,7 @@ class Customers
      INNER JOIN tickets 
      ON films.id = tickets.film_id
      WHERE tickets.customer_id = #{@id};"
-    return Films.get_objects(sql)
+    return Films.get_objects(sql).
   end
     
   def tickets()
@@ -62,15 +63,34 @@ class Customers
     sql = "SELECT * FROM tickets WHERE customer_id =#{@id};"
     return Tickets.get_objects(sql).count
   end  
+ 
+  def total_price(c)
+    total= []
+    for o in c
+      total_price.push(o.get_price())
+    end
+    return total.sum
+  end    
 
+
+
+  
   def total_price()
-    sql = "SELECT films.price FROM films
-    INNER JOIN tickets 
-    ON films.id = tickets.film_id
-    WHERE tickets.customer_id = #{@id};"
-    return Films.get_objects(sql)
-  end  
-     
-      
+      sql = "SELECT films.price FROM films
+       INNER JOIN tickets 
+       ON films.id = tickets.film_id
+       WHERE tickets.customer_id = #{@id};"
+      film_prices = SqlRunner.run( sql )
+      array_prices=[]
+      film_prices.map{|price| array_prices << price.get_price()}
+      return array_prices
+  end
+  
+   
+
+
+  # def update_funds()
+  #    customer1.
+  # end  
 
 end
